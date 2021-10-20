@@ -7,6 +7,9 @@
 
 	ul {
 		li {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
 			&:not(:last-of-type) {
 				margin-bottom: 10px;
 			}
@@ -40,18 +43,8 @@
 			}
 		}
 	}
-	.authors {
-		ul {
-			li {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				&:not(:last-of-type) {
-					margin-bottom: 10px;
-				}
-			}
-		}
-	}
+	// .authors {
+	// }
 	.duration {
 		h2 {
 			font-weight: 400;

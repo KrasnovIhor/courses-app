@@ -1,7 +1,10 @@
 import { useState } from 'react';
+
 import { mockedCoursesList, mockedAuthorsList } from '../../constants';
+
 import CourseCard from './components/CourseCard/CourseCard';
 import SearchBar from './components/SearchBar/SearchBar';
+
 import styles from './Courses.module.scss';
 
 const Courses = () => {

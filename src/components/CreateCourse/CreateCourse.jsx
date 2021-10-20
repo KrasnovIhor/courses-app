@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
+import { v4 as uuidv4 } from 'uuid';
 
 import { Button } from '../../common/Button/Button';
 import { Input } from '../../common/Input/Input';
@@ -22,6 +22,7 @@ const CreateCourse = ({ history }) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+
 		const authors = courseAuthors.map((author) => author.id);
 		const course = {
 			id: uuidv4(),
@@ -31,17 +32,25 @@ const CreateCourse = ({ history }) => {
 			duration: parseInt(duration, 10),
 			authors,
 		};
+
 		mockedCoursesList.push(course);
+
 		console.log(course);
+
 		history.push('/');
 	};
 
 	const handleAddAuthor = () => {
-		if (!authorName) return;
+		if (authorName.length < 2) {
+			alert('Author name should be at least 2 characters');
+			return;
+		}
+
 		const newAuthor = {
 			id: uuidv4(),
 			name: authorName,
 		};
+
 		setAuthors([...authorsList, newAuthor]);
 		mockedAuthorsList.push(newAuthor);
 		setAuthorName('');
@@ -55,6 +64,16 @@ const CreateCourse = ({ history }) => {
 
 		setCourseAuthors([...courseAuthors, authorObj]);
 		setAuthors([...authorsList].filter((author) => author.id !== id));
+	};
+
+	const handleDeleteAuthor = ({ id, name }) => {
+		const deletedAuthor = {
+			id,
+			name,
+		};
+
+		setCourseAuthors([...courseAuthors].filter((author) => author.id !== id));
+		setAuthors([...authorsList, deletedAuthor]);
 	};
 
 	return (
@@ -122,7 +141,13 @@ const CreateCourse = ({ history }) => {
 						{courseAuthors.length ? (
 							<ul>
 								{courseAuthors.map((author) => (
-									<li key={author.id}>{author.name}</li>
+									<li key={author.id}>
+										<span>{author.name}</span>
+										<Button
+											onClick={() => handleDeleteAuthor(author)}
+											buttonText='Delete author'
+										/>
+									</li>
 								))}
 							</ul>
 						) : (

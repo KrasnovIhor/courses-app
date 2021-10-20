@@ -1,9 +1,11 @@
-import './App.scss';
 import Courses from './components/Courses/Courses';
 import Header from './components/Header/Header';
-import 'normalize.css';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import CreateCourse from './components/CreateCourse/CreateCourse';
+
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+
+import './App.scss';
+import 'normalize.css';
 
 const App = () => {
 	return (
