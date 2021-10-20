@@ -33,9 +33,14 @@ const CreateCourse = ({ history }) => {
 			authors,
 		};
 
-		mockedCoursesList.push(course);
+		for (const key in course) {
+			if (!course[key]) {
+				alert('All fields should be fill in!');
+				return;
+			}
+		}
 
-		console.log(course);
+		mockedCoursesList.push(course);
 
 		history.push('/');
 	};

@@ -9,6 +9,15 @@ export const Input = ({
 	id = 'search',
 	type = 'text',
 }) => {
+	const handleChange = ({ target: { value } }) => {
+		if (type === 'number') {
+			if (value < 0) return;
+			onChange(value);
+		} else {
+			onChange(value);
+		}
+	};
+
 	return (
 		<div>
 			{labelText && (
@@ -20,7 +29,7 @@ export const Input = ({
 				<input
 					className={styles.input}
 					value={value}
-					onChange={(e) => onChange(e.target.value)}
+					onChange={handleChange}
 					id={id}
 					type={type}
 					placeholder={placeHolderText}
