@@ -1,0 +1,11 @@
+.courses {
+	border: 1px solid rgb(40, 161, 236);
+	padding: 20px;
+	ul {
+		li {
+			&:not(:last-of-type) {
+				margin-bottom: 30px;
+			}
+		}
+	}
+}

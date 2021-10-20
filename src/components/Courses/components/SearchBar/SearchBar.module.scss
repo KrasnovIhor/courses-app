@@ -1,0 +1,16 @@
+.form {
+	display: flex;
+	margin-bottom: 30px;
+	justify-content: space-between;
+	align-items: center;
+	.searchBar {
+		display: flex;
+		align-items: stretch;
+		& > div {
+			margin-right: 20px;
+		}
+		input {
+			min-width: 400px;
+		}
+	}
+}

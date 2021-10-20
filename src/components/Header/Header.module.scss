@@ -1,0 +1,16 @@
+.header {
+	border: 1px solid red;
+	padding: 10px 20px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	p {
+		margin-right: 25px;
+	}
+}
+.info {
+	display: flex;
+	align-items: center;
+}
