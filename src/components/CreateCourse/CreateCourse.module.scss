@@ -1,6 +1,18 @@
 .createCourse {
 	border: 1px solid rgb(40, 161, 236);
 	padding: 20px;
+	h3 {
+		text-align: center;
+	}
+
+	ul {
+		li {
+			&:not(:last-of-type) {
+				margin-bottom: 10px;
+			}
+		}
+	}
+
 	.row {
 		display: flex;
 		align-items: flex-end;
@@ -13,20 +25,48 @@
 	.addAuthor {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
-		column-gap: 30px;
+		grid-template-rows: auto;
+		column-gap: 80px;
 		border: 1px solid black;
 		padding: 30px 15px;
 		margin-top: 20px;
-		h3 {
-			text-align: center;
-		}
 
-		.left {
+		.authorName {
 			display: flex;
 			flex-direction: column;
 			button {
 				align-self: center;
 				margin-top: 20px;
+			}
+		}
+	}
+	.authors {
+		ul {
+			li {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				&:not(:last-of-type) {
+					margin-bottom: 10px;
+				}
+			}
+		}
+	}
+	.duration {
+		h2 {
+			font-weight: 400;
+			span {
+				font-weight: 700;
+			}
+		}
+	}
+	.courseAuthors {
+		p {
+			text-align: center;
+		}
+		ul {
+			li {
+				text-align: center;
 			}
 		}
 	}

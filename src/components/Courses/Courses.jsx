@@ -12,6 +12,8 @@ const Courses = () => {
 		return course.title.match(regex) || course.id.match(regex);
 	});
 
+	console.log(mockedCoursesList);
+
 	return (
 		<div className={styles.courses}>
 			<SearchBar handleSearch={setSearchQuery} />
