@@ -49,7 +49,7 @@ const CreateCourse = ({ history }) => {
 		};
 
 		for (const key in course) {
-			if (!course[key]) {
+			if (!course[key] || !authors.length) {
 				alert('All fields should be fill in!');
 				return;
 			}
