@@ -11,9 +11,9 @@ const Courses = () => {
 	const [searchQuery, setSearchQuery] = useState('');
 
 	const regex = new RegExp(searchQuery, 'gi');
-	const searchedCourses = mockedCoursesList.filter((course) => {
-		return course.title.match(regex) || course.id.match(regex);
-	});
+	const searchedCourses = mockedCoursesList.filter(
+		(course) => course.title.match(regex) || course.id.match(regex)
+	);
 
 	console.log(mockedCoursesList);
 

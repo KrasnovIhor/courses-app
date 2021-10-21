@@ -6,9 +6,24 @@ import { v4 as uuidv4 } from 'uuid';
 import { Button } from '../../common/Button/Button';
 import { Input } from '../../common/Input/Input';
 
-import { mockedAuthorsList, mockedCoursesList } from '../../constants';
-
 import { pipeDuration } from '../../helpers/pipeDuration';
+
+import {
+	BUTTON_TEXT_ADD_AUTHOR,
+	BUTTON_TEXT_CREATE_AUTHOR,
+	BUTTON_TEXT_CREATE_COURSE,
+	BUTTON_TEXT_DELETE_AUTHOR,
+	LABEL_TEXT_TITLE,
+	LABEL_TEXT_DESCRIPTION,
+	LABEL_TEXT_DURATION,
+	LABEL_TEXT_AUTHOR_NAME,
+	INPUT_PLACEHOLDER_TITLE,
+	INPUT_PLACEHOLDER_DESCRIPTION,
+	INPUT_PLACEHOLDER_DURATION,
+	INPUT_PLACEHOLDER_AUTHOR_NAME,
+	mockedAuthorsList,
+	mockedCoursesList,
+} from '../../constants';
 
 import styles from './CreateCourse.module.scss';
 
@@ -88,31 +103,34 @@ const CreateCourse = ({ history }) => {
 					<Input
 						onChange={setTitle}
 						value={title}
-						labelText='Title'
-						placeHolderText='Enter title...'
+						labelText={LABEL_TEXT_TITLE}
+						placeHolderText={INPUT_PLACEHOLDER_TITLE}
 						id='title'
 					/>
-					<Button type='submit' buttonText='Create Course' />
+					<Button type='submit' buttonText={BUTTON_TEXT_CREATE_COURSE} />
 				</div>
 				<Input
 					isTextarea
 					onChange={setDescription}
 					value={description}
-					labelText='Description'
-					placeHolderText='Enter Description here...'
+					labelText={LABEL_TEXT_DESCRIPTION}
+					placeHolderText={INPUT_PLACEHOLDER_DESCRIPTION}
 					id='description'
 				/>
 				<div className={styles.addAuthor}>
 					<div className={styles.authorName}>
 						<h3>Add Author</h3>
 						<Input
-							labelText='Author name'
-							placeHolderText='Enter author name...'
+							labelText={LABEL_TEXT_AUTHOR_NAME}
+							placeHolderText={INPUT_PLACEHOLDER_AUTHOR_NAME}
 							value={authorName}
 							onChange={setAuthorName}
 							id='authorName'
 						/>
-						<Button onClick={handleAddAuthor} buttonText='Create author' />
+						<Button
+							onClick={handleAddAuthor}
+							buttonText={BUTTON_TEXT_CREATE_AUTHOR}
+						/>
 					</div>
 					<div className={styles.authors}>
 						<h3>Authors</h3>
@@ -122,7 +140,7 @@ const CreateCourse = ({ history }) => {
 									<span>{author.name}</span>
 									<Button
 										onClick={() => handleCourseAuthor(author)}
-										buttonText='Add author'
+										buttonText={BUTTON_TEXT_ADD_AUTHOR}
 									/>
 								</li>
 							))}
@@ -134,8 +152,8 @@ const CreateCourse = ({ history }) => {
 							value={duration}
 							type='number'
 							onChange={setDuration}
-							labelText='Duration'
-							placeHolderText='Enter duration in minutes...'
+							labelText={LABEL_TEXT_DURATION}
+							placeHolderText={INPUT_PLACEHOLDER_DURATION}
 						/>
 						<h2>
 							Duration: <span>{pipeDuration(duration)}</span> hours
@@ -150,7 +168,7 @@ const CreateCourse = ({ history }) => {
 										<span>{author.name}</span>
 										<Button
 											onClick={() => handleDeleteAuthor(author)}
-											buttonText='Delete author'
+											buttonText={BUTTON_TEXT_DELETE_AUTHOR}
 										/>
 									</li>
 								))}

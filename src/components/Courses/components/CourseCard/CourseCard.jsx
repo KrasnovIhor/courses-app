@@ -1,4 +1,6 @@
 import { Button } from '../../../../common/Button/Button';
+import { BUTTON_TEXT_SHOW_COURSE } from '../../../../constants';
+
 import { dateGenerator } from '../../../../helpers/dateGenerator';
 import { pickAuthors } from '../../../../helpers/pickAuthors';
 import { pipeDuration } from '../../../../helpers/pipeDuration';
@@ -27,7 +29,7 @@ const CourseCard = ({
 						<span>Created:</span> {dateGenerator(creationDate)}
 					</li>
 				</ul>
-				<Button buttonText='Show course' />
+				<Button buttonText={BUTTON_TEXT_SHOW_COURSE} />
 			</div>
 		</div>
 	);
