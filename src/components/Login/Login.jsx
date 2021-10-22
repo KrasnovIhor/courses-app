@@ -6,7 +6,14 @@ import { Link } from 'react-router-dom';
 import { Button } from '../../common/Button/Button';
 import { Input } from '../../common/Input/Input';
 
-import { API } from '../../constants';
+import {
+	API,
+	LABEL_TEXT_EMAIL,
+	LABEL_TEXT_PASSWORD,
+	INPUT_PLACEHOLDER_EMAIL,
+	INPUT_PLACEHOLDER_PASSWORD,
+	BUTTON_TEXT_LOGIN,
+} from '../../constants';
 
 import styles from './Login.module.scss';
 
@@ -47,21 +54,21 @@ const Login = () => {
 				<Input
 					className={styles.input}
 					type='email'
-					placeholder='Enter email'
-					labeltext='Email'
+					placeholder={INPUT_PLACEHOLDER_EMAIL}
+					labeltext={LABEL_TEXT_EMAIL}
 					value={email}
 					onChange={(e) => setEmail(e.target.value)}
 					required
 				/>
 				<Input
 					type='password'
-					placeholder='Enter password'
-					labeltext='Password'
+					placeholder={INPUT_PLACEHOLDER_PASSWORD}
+					labeltext={LABEL_TEXT_PASSWORD}
 					value={password}
 					onChange={(e) => setPassword(e.target.value)}
 					required
 				/>
-				<Button children='Login' />
+				<Button children={BUTTON_TEXT_LOGIN} />
 				<p>
 					If you don'/t have an account, you can{' '}
 					<Link to='/registration'>Register</Link>

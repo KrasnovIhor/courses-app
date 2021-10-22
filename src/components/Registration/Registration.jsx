@@ -6,7 +6,16 @@ import { Link } from 'react-router-dom';
 import { Button } from '../../common/Button/Button';
 import { Input } from '../../common/Input/Input';
 
-import { API } from '../../constants';
+import {
+	API,
+	LABEL_TEXT_EMAIL,
+	LABEL_TEXT_NAME,
+	LABEL_TEXT_PASSWORD,
+	INPUT_PLACEHOLDER_EMAIL,
+	INPUT_PLACEHOLDER_NAME,
+	INPUT_PLACEHOLDER_PASSWORD,
+	BUTTON_TEXT_REGISTRATION,
+} from '../../constants';
 
 import styles from './Registration.module.scss';
 
@@ -49,8 +58,8 @@ const Registration = () => {
 				<Input
 					className={styles.input}
 					type='text'
-					placeholder='Enter name'
-					labeltext='Name'
+					placeholder={INPUT_PLACEHOLDER_NAME}
+					labeltext={LABEL_TEXT_NAME}
 					onChange={(e) => setName(e.target.value)}
 					value={name}
 					required
@@ -58,21 +67,21 @@ const Registration = () => {
 				<Input
 					className={styles.input}
 					type='email'
-					placeholder='Enter email'
-					labeltext='Email'
+					placeholder={INPUT_PLACEHOLDER_EMAIL}
+					labeltext={LABEL_TEXT_EMAIL}
 					value={email}
 					onChange={(e) => setEmail(e.target.value)}
 					required
 				/>
 				<Input
 					type='password'
-					placeholder='Enter password'
-					labeltext='Password'
+					placeholder={INPUT_PLACEHOLDER_PASSWORD}
+					labeltext={LABEL_TEXT_PASSWORD}
 					value={password}
 					onChange={(e) => setPassword(e.target.value)}
 					required
 				/>
-				<Button type='submit' children='Registration' />
+				<Button type='submit' children={BUTTON_TEXT_REGISTRATION} />
 				<p>
 					If you have an account, you can <Link to='login'>Login</Link>
 				</p>
