@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useHistory } from 'react-router';
 
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 
 import { Button } from '../../common/Button/Button';
 import { Input } from '../../common/Input/Input';
+import { Textarea } from '../../common/Textarea/Textarea';
 
 import { pipeDuration } from '../../helpers/pipeDuration';
 
@@ -27,13 +29,15 @@ import {
 
 import styles from './CreateCourse.module.scss';
 
-const CreateCourse = ({ history }) => {
+const CreateCourse = () => {
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [authorName, setAuthorName] = useState('');
 	const [authorsList, setAuthors] = useState(mockedAuthorsList);
 	const [courseAuthors, setCourseAuthors] = useState([]);
 	const [duration, setDuration] = useState('');
+
+	const history = useHistory();
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -57,7 +61,7 @@ const CreateCourse = ({ history }) => {
 
 		mockedCoursesList.push(course);
 
-		history.push('/');
+		history.push('/courses');
 	};
 
 	const handleAddAuthor = () => {
@@ -96,40 +100,45 @@ const CreateCourse = ({ history }) => {
 		setAuthors([...authorsList, deletedAuthor]);
 	};
 
+	const handleNumberInput = ({ target: { value } }) => {
+		if (value < 0) return;
+		setDuration(value);
+	};
+
 	return (
 		<div className={styles.createCourse}>
 			<form onSubmit={handleSubmit}>
 				<div className={styles.row}>
 					<Input
-						onChange={setTitle}
+						onChange={(e) => setTitle(e.target.value)}
 						value={title}
-						labelText={LABEL_TEXT_TITLE}
-						placeHolderText={INPUT_PLACEHOLDER_TITLE}
+						labeltext={LABEL_TEXT_TITLE}
+						placeholder={INPUT_PLACEHOLDER_TITLE}
 						id='title'
 					/>
-					<Button type='submit' buttonText={BUTTON_TEXT_CREATE_COURSE} />
+					<Button type='submit' children={BUTTON_TEXT_CREATE_COURSE} />
 				</div>
-				<Input
-					isTextarea
-					onChange={setDescription}
+				<Textarea
+					onChange={(e) => setDescription(e.target.value)}
 					value={description}
-					labelText={LABEL_TEXT_DESCRIPTION}
-					placeHolderText={INPUT_PLACEHOLDER_DESCRIPTION}
+					labeltext={LABEL_TEXT_DESCRIPTION}
+					placeholder={INPUT_PLACEHOLDER_DESCRIPTION}
 					id='description'
 				/>
 				<div className={styles.addAuthor}>
 					<div className={styles.authorName}>
 						<h3>Add Author</h3>
 						<Input
-							labelText={LABEL_TEXT_AUTHOR_NAME}
-							placeHolderText={INPUT_PLACEHOLDER_AUTHOR_NAME}
+							labeltext={LABEL_TEXT_AUTHOR_NAME}
+							placeholder={INPUT_PLACEHOLDER_AUTHOR_NAME}
 							value={authorName}
-							onChange={setAuthorName}
+							onChange={(e) => setAuthorName(e.target.value)}
 							id='authorName'
 						/>
 						<Button
 							onClick={handleAddAuthor}
-							buttonText={BUTTON_TEXT_CREATE_AUTHOR}
+							type='button'
+							children={BUTTON_TEXT_CREATE_AUTHOR}
 						/>
 					</div>
 					<div className={styles.authors}>
@@ -140,7 +149,8 @@ const CreateCourse = ({ history }) => {
 									<span>{author.name}</span>
 									<Button
 										onClick={() => handleCourseAuthor(author)}
-										buttonText={BUTTON_TEXT_ADD_AUTHOR}
+										type='button'
+										children={BUTTON_TEXT_ADD_AUTHOR}
 									/>
 								</li>
 							))}
@@ -151,9 +161,9 @@ const CreateCourse = ({ history }) => {
 						<Input
 							value={duration}
 							type='number'
-							onChange={setDuration}
-							labelText={LABEL_TEXT_DURATION}
-							placeHolderText={INPUT_PLACEHOLDER_DURATION}
+							onChange={handleNumberInput}
+							labeltext={LABEL_TEXT_DURATION}
+							placeholder={INPUT_PLACEHOLDER_DURATION}
 						/>
 						<h2>
 							Duration: <span>{pipeDuration(duration)}</span> hours
@@ -168,7 +178,8 @@ const CreateCourse = ({ history }) => {
 										<span>{author.name}</span>
 										<Button
 											onClick={() => handleDeleteAuthor(author)}
-											buttonText={BUTTON_TEXT_DELETE_AUTHOR}
+											children={BUTTON_TEXT_DELETE_AUTHOR}
+											type='button'
 										/>
 									</li>
 								))}

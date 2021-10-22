@@ -1,0 +1,26 @@
+.registrtion {
+	border: 1px solid rgb(40, 161, 236);
+	padding: 200px;
+	h2 {
+		text-align: center;
+	}
+	.form {
+		display: flex;
+		flex-direction: column;
+		max-width: 350px;
+		margin: 0 auto;
+		button {
+			margin-top: 20px;
+			align-self: center;
+		}
+		p {
+			text-align: center;
+		}
+	}
+	.input {
+		margin-bottom: 15px;
+		&:last-of-type {
+			margin-bottom: 0;
+		}
+	}
+}

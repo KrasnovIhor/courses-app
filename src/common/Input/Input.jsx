@@ -1,48 +1,15 @@
+import classNames from 'classnames';
 import styles from './Input.module.scss';
 
-export const Input = ({
-	labelText,
-	placeHolderText,
-	onChange,
-	value,
-	isTextarea,
-	id = 'search',
-	type = 'text',
-}) => {
-	const handleChange = ({ target: { value } }) => {
-		if (type === 'number') {
-			if (value < 0) return;
-			onChange(value);
-		} else {
-			onChange(value);
-		}
-	};
-
+export const Input = (props) => {
 	return (
-		<div>
-			{labelText && (
-				<label className={styles.label} htmlFor={id}>
-					{labelText}
+		<div className={props.className}>
+			{props.labeltext && (
+				<label className={styles.label} htmlFor={props.id}>
+					{props.labeltext}
 				</label>
 			)}
-			{!isTextarea ? (
-				<input
-					className={styles.input}
-					value={value}
-					onChange={handleChange}
-					id={id}
-					type={type}
-					placeholder={placeHolderText}
-				/>
-			) : (
-				<textarea
-					className={styles.textarea}
-					value={value}
-					onChange={(e) => onChange(e.target.value)}
-					id={id}
-					placeholder={placeHolderText}
-				/>
-			)}
+			<input {...props} className={classNames(styles.input, props.className)} />
 		</div>
 	);
 };

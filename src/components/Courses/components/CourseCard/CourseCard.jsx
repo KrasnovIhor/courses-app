@@ -29,7 +29,7 @@ const CourseCard = ({
 						<span>Created:</span> {dateGenerator(creationDate)}
 					</li>
 				</ul>
-				<Button buttonText={BUTTON_TEXT_SHOW_COURSE} />
+				<Button children={BUTTON_TEXT_SHOW_COURSE} />
 			</div>
 		</div>
 	);

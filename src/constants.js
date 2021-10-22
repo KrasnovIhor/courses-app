@@ -73,3 +73,5 @@ export const INPUT_PLACEHOLDER_TITLE = 'Enter title...';
 export const INPUT_PLACEHOLDER_DESCRIPTION = 'Enter description here...';
 export const INPUT_PLACEHOLDER_DURATION = 'Enter duration in minutes...';
 export const INPUT_PLACEHOLDER_AUTHOR_NAME = 'Enter author name...';
+
+export const API = 'http://localhost:3000';

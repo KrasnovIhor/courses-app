@@ -26,14 +26,14 @@ const SearchBar = ({ handleSearch }) => {
 			<div className={styles.searchBar}>
 				<Input
 					className={styles.searchInput}
-					placeHolderText={INPUT_PLACEHOLDER_SEARCH}
+					placeholder={INPUT_PLACEHOLDER_SEARCH}
 					value={inputData}
 					onChange={setInputData}
 				/>
-				<Button type='submit' buttonText={BUTTON_TEXT_SEARCH} />
+				<Button type='submit' children={BUTTON_TEXT_SEARCH} />
 			</div>
-			<Link to='/create'>
-				<Button type='button' buttonText={BUTTON_TEXT_NEW_COURSE} />
+			<Link to='/courses/add'>
+				<Button type='button' children={BUTTON_TEXT_NEW_COURSE} />
 			</Link>
 		</form>
 	);

@@ -1,9 +1,8 @@
+import classNames from 'classnames';
 import styles from './Button.module.scss';
 
-export const Button = ({ buttonText, onClick, type = 'button' }) => {
+export const Button = (props) => {
 	return (
-		<button type={type} className={styles.button} onClick={onClick}>
-			{buttonText}
-		</button>
+		<button {...props} className={classNames(styles.button, props.className)} />
 	);
 };

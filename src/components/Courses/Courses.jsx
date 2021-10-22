@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { mockedCoursesList, mockedAuthorsList } from '../../constants';
 
@@ -10,28 +10,23 @@ import styles from './Courses.module.scss';
 const Courses = () => {
 	const [searchQuery, setSearchQuery] = useState('');
 
-	const regex = new RegExp(searchQuery, 'gi');
+	const regex = useMemo(() => new RegExp(searchQuery, 'gi'), [searchQuery]);
+
 	const searchedCourses = mockedCoursesList.filter(
 		(course) => course.title.match(regex) || course.id.match(regex)
 	);
 
-	console.log(mockedCoursesList);
+	const list = !searchQuery ? mockedCoursesList : searchedCourses;
 
 	return (
 		<div className={styles.courses}>
 			<SearchBar handleSearch={setSearchQuery} />
 			<ul>
-				{!searchQuery
-					? mockedCoursesList.map((course) => (
-							<li key={course.id}>
-								<CourseCard course={course} authorsList={mockedAuthorsList} />
-							</li>
-					  ))
-					: searchedCourses.map((course) => (
-							<li key={course.id}>
-								<CourseCard course={course} authorsList={mockedAuthorsList} />
-							</li>
-					  ))}
+				{list.map((course) => (
+					<li key={course.id}>
+						<CourseCard course={course} authorsList={mockedAuthorsList} />
+					</li>
+				))}
 			</ul>
 		</div>
 	);
