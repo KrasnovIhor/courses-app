@@ -28,7 +28,7 @@ const SearchBar = ({ handleSearch }) => {
 					className={styles.searchInput}
 					placeholder={INPUT_PLACEHOLDER_SEARCH}
 					value={inputData}
-					onChange={setInputData}
+					onChange={(e) => setInputData(e.target.value)}
 				/>
 				<Button type='submit' children={BUTTON_TEXT_SEARCH} />
 			</div>

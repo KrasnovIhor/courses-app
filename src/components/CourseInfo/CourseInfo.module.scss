@@ -1,0 +1,41 @@
+.course {
+	border: 1px solid rgb(40, 161, 236);
+	padding: 15px 30px;
+	h1 {
+		text-align: center;
+		margin-bottom: 50px;
+	}
+	.link {
+		text-decoration: none;
+		color: #000;
+		position: relative;
+		display: flex;
+		&::before {
+			content: '<';
+			display: inline-block;
+			margin-right: 10px;
+		}
+	}
+
+	.info {
+		display: grid;
+		grid-template-columns: 2fr 1fr;
+		column-gap: 50px;
+	}
+	.sidebar {
+		span {
+			font-weight: 700;
+		}
+
+		ul {
+			li {
+				&:not(:last-of-type) {
+					margin-bottom: 15px;
+				}
+			}
+		}
+	}
+	.authors {
+		margin-top: 20px;
+	}
+}

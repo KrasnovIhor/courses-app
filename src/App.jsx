@@ -4,6 +4,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import Courses from './components/Courses/Courses';
 import Header from './components/Header/Header';
 import CreateCourse from './components/CreateCourse/CreateCourse';
+import CourseInfo from './components/CourseInfo/CourseInfo';
 import Registration from './components/Registration/Registration';
 import Login from './components/Login/Login';
 
@@ -20,10 +21,8 @@ const App = () => {
 		try {
 			const token = localStorage.getItem('token');
 
-			if (token) {
-				history.push('/courses');
-			} else {
-				history.push('/registration');
+			if (!token) {
+				history.push('/login');
 			}
 		} catch (error) {
 			console.error(error);
@@ -35,6 +34,7 @@ const App = () => {
 			<Switch>
 				<Route exact path='/courses' component={Courses} />
 				<Route path='/courses/add' component={CreateCourse} />
+				<Route path='/courses/:courseId' component={CourseInfo} />
 				<Route path='/registration' component={Registration} />
 				<Route path='/login' component={Login} />
 			</Switch>

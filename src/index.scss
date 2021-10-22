@@ -16,6 +16,11 @@ ul {
 	margin: 0;
 }
 
+p {
+	word-break: break-word;
+}
+
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
 	-webkit-appearance: none;

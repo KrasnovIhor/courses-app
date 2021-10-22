@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import { Button } from '../../../../common/Button/Button';
 import { BUTTON_TEXT_SHOW_COURSE } from '../../../../constants';
 
@@ -29,7 +31,9 @@ const CourseCard = ({
 						<span>Created:</span> {dateGenerator(creationDate)}
 					</li>
 				</ul>
-				<Button children={BUTTON_TEXT_SHOW_COURSE} />
+				<Link className={styles.button} to={`courses/${title.toLowerCase()}`}>
+					<Button children={BUTTON_TEXT_SHOW_COURSE} />
+				</Link>
 			</div>
 		</div>
 	);
