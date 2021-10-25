@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import { Button } from '../../../../common/Button/Button';
@@ -37,6 +38,11 @@ const CourseCard = ({
 			</div>
 		</div>
 	);
+};
+
+CourseCard.propTypes = {
+	course: PropTypes.object.isRequired,
+	authorsList: PropTypes.array.isRequired,
 };
 
 export default CourseCard;

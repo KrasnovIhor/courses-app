@@ -1,6 +1,8 @@
 import classNames from 'classnames';
 import styles from './Textarea.module.scss';
 
+import PropTypes from 'prop-types';
+
 export const Textarea = (props) => {
 	return (
 		<div>
@@ -15,4 +17,8 @@ export const Textarea = (props) => {
 			/>
 		</div>
 	);
+};
+
+Textarea.propTypes = {
+	labeltext: PropTypes.string,
 };

@@ -15,13 +15,13 @@ const CourseInfo = () => {
 	const { courseId } = useParams();
 	const [course, setCourse] = useState({});
 
-	useEffect(() => {
-		const myCourse = mockedCoursesList.find(
-			(course) => course.title.toLowerCase() === courseId
-		);
+	const myCourse = mockedCoursesList.find(
+		(course) => course.title.toLowerCase() === courseId
+	);
 
+	useEffect(() => {
 		setCourse(myCourse);
-	}, [courseId]);
+	}, [myCourse]);
 
 	return (
 		<div className={styles.course}>

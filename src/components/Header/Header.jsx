@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useHistory } from 'react-router';
 
 import { Link } from 'react-router-dom';
@@ -10,18 +10,22 @@ import { Logo } from './components/Logo/Logo';
 
 import styles from './Header.module.scss';
 
+import PropTypes from 'prop-types';
+
 const Header = ({ pathname }) => {
 	const [visible, setVisible] = useState(false);
 	const [userName, setUserName] = useState('');
 
 	const history = useHistory();
 
-	useEffect(() => {
-		const buttonVisibility =
-			pathname === '/login' || pathname === '/registration';
+	const buttonVisibility = useMemo(
+		() => pathname === '/login' || pathname === '/registration',
+		[pathname]
+	);
 
+	useEffect(() => {
 		setVisible(buttonVisibility);
-	}, [pathname]);
+	}, [buttonVisibility]);
 
 	useEffect(() => {
 		const myFetch = async () => {
@@ -65,6 +69,10 @@ const Header = ({ pathname }) => {
 			</div>
 		</header>
 	);
+};
+
+Header.propTypes = {
+	pathname: PropTypes.string.isRequired,
 };
 
 export default Header;

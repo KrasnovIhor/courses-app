@@ -13,6 +13,8 @@ import {
 	INPUT_PLACEHOLDER_SEARCH,
 } from '../../../../constants';
 
+import PropTypes from 'prop-types';
+
 const SearchBar = ({ handleSearch }) => {
 	const [inputData, setInputData] = useState('');
 
@@ -37,6 +39,10 @@ const SearchBar = ({ handleSearch }) => {
 			</Link>
 		</form>
 	);
+};
+
+SearchBar.propTypes = {
+	handleSearch: PropTypes.func.isRequired,
 };
 
 export default SearchBar;

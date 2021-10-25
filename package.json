@@ -48,6 +48,7 @@
     ]
   },
   "devDependencies": {
+    "check-prop-types": "^1.1.2",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
