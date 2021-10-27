@@ -1,13 +1,18 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import { useDispatch } from 'react-redux';
+
+import { addUser } from '../../store/user/actionCreators';
+
 import { Link } from 'react-router-dom';
 
 import { Button } from '../../common/Button/Button';
 import { Input } from '../../common/Input/Input';
 
+import { fetchUser, login } from '../../services';
+
 import {
-	API,
 	LABEL_TEXT_EMAIL,
 	LABEL_TEXT_PASSWORD,
 	INPUT_PLACEHOLDER_EMAIL,
@@ -21,27 +26,34 @@ const Login = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 
+	const dispatch = useDispatch();
+
 	const history = useHistory();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+
 		try {
-			const user = {
-				password,
+			const userLoggedIn = {
 				email,
+				password,
 			};
+			const response = await login(userLoggedIn);
+			const {
+				data: { result: token },
+				status,
+				successful,
+			} = response;
+			const user = await fetchUser(token);
 
-			const response = await fetch(`${API}/login`, {
-				method: 'POST',
-				body: JSON.stringify(user),
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			});
-			const result = await response.json();
+			dispatch(addUser(user));
 
-			localStorage.setItem('token', result.result);
+			if (!successful && status !== 201) {
+				alert('Failed to login!');
+				return;
+			}
 
+			localStorage.setItem('token', token);
 			history.push('/courses');
 		} catch (error) {
 			console.error(error);

@@ -1,9 +1,16 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router';
+import { useEffect, useMemo } from 'react';
 
+import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import { mockedAuthorsList, mockedCoursesList } from '../../constants';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { fetchAuthors, fetchCoursesAll } from '../../services';
+
+import { addAuthors } from '../../store/authors/actionCreators';
+import { addCoursesAll } from '../../store/courses/actionCreators';
+
+import { getCourse, getAuthors } from '../../store/selectors';
 
 import { dateGenerator } from '../../helpers/dateGenerator';
 import { pickAuthors } from '../../helpers/pickAuthors';
@@ -13,15 +20,39 @@ import styles from './CourseInfo.module.scss';
 
 const CourseInfo = () => {
 	const { courseId } = useParams();
-	const [course, setCourse] = useState({});
 
-	const myCourse = mockedCoursesList.find(
-		(course) => course.title.toLowerCase() === courseId
+	const dispatch = useDispatch();
+
+	const selectedCourse = useSelector((state) => getCourse(state, courseId));
+
+	const course = useMemo(
+		() => (selectedCourse ? selectedCourse : {}),
+		[selectedCourse]
 	);
+	const authors = useSelector(getAuthors);
 
 	useEffect(() => {
-		setCourse(myCourse);
-	}, [myCourse]);
+		const myFetch = async () => {
+			if (!course.id) {
+				const fetchedCourses = await fetchCoursesAll();
+
+				dispatch(addCoursesAll(fetchedCourses));
+			}
+		};
+		myFetch();
+	}, [course, dispatch]);
+
+	useEffect(() => {
+		const myFetch = async () => {
+			if (!authors.length) {
+				const fetchedAuthors = await fetchAuthors();
+
+				dispatch(addAuthors(fetchedAuthors));
+			}
+		};
+
+		myFetch();
+	}, [dispatch, authors.length]);
 
 	return (
 		<div className={styles.course}>
@@ -47,11 +78,9 @@ const CourseInfo = () => {
 						<li>
 							<span>Authors:</span>
 							<ul className={styles.authors}>
-								{pickAuthors(course.authors, mockedAuthorsList, true).map(
-									(author) => (
-										<li key={author.id}>{author.name}</li>
-									)
-								)}
+								{pickAuthors(course.authors, authors, true).map((author) => (
+									<li key={author.id}>{author.name}</li>
+								))}
 							</ul>
 						</li>
 					</ul>

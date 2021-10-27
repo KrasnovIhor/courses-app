@@ -18,8 +18,13 @@
 				}
 			}
 		}
-		.button {
-			align-self: center;
+		.buttons {
+			display: flex;
+			align-items: center;
+			button {
+				align-self: center;
+				margin-right: 15px;
+			}
 		}
 	}
 }

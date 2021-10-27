@@ -1,8 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
+
+import { useSelector, useDispatch } from 'react-redux';
+
+import { fetchAuthors } from '../../services';
+
+import { addAuthors, addAuthor } from '../../store/authors/actionCreators';
+import { addCourse } from '../../store/courses/actionCreators';
 
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
+
+import { getAuthors } from '../../store/selectors';
 
 import { Button } from '../../common/Button/Button';
 import { Input } from '../../common/Input/Input';
@@ -23,8 +32,6 @@ import {
 	INPUT_PLACEHOLDER_DESCRIPTION,
 	INPUT_PLACEHOLDER_DURATION,
 	INPUT_PLACEHOLDER_AUTHOR_NAME,
-	mockedAuthorsList,
-	mockedCoursesList,
 } from '../../constants';
 
 import styles from './CreateCourse.module.scss';
@@ -33,11 +40,35 @@ const CreateCourse = () => {
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [authorName, setAuthorName] = useState('');
-	const [authorsList, setAuthors] = useState(mockedAuthorsList);
+	const [authors, setAuthors] = useState([]);
 	const [courseAuthors, setCourseAuthors] = useState([]);
 	const [duration, setDuration] = useState('');
 
+	const authorsList = useSelector(getAuthors);
+
+	const dispatch = useDispatch();
+
 	const history = useHistory();
+
+	useEffect(() => {
+		const myFetch = async () => {
+			if (!authorsList.length) {
+				const fetchedAuthors = await fetchAuthors();
+
+				setAuthors(fetchedAuthors);
+
+				dispatch(addAuthors(fetchedAuthors));
+			}
+		};
+
+		myFetch();
+	}, [dispatch, authorsList]);
+
+	useEffect(() => {
+		if (authorsList.length) {
+			setAuthors(authorsList);
+		}
+	}, []);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -59,7 +90,8 @@ const CreateCourse = () => {
 			}
 		}
 
-		mockedCoursesList.push(course);
+		// await fetchCourseAdd(course);
+		dispatch(addCourse(course));
 
 		history.push('/courses');
 	};
@@ -75,8 +107,10 @@ const CreateCourse = () => {
 			name: authorName,
 		};
 
-		setAuthors([...authorsList, newAuthor]);
-		mockedAuthorsList.push(newAuthor);
+		dispatch(addAuthor(newAuthor));
+
+		setAuthors([...authors, newAuthor]);
+
 		setAuthorName('');
 	};
 
@@ -87,7 +121,8 @@ const CreateCourse = () => {
 		};
 
 		setCourseAuthors([...courseAuthors, authorObj]);
-		setAuthors([...authorsList].filter((author) => author.id !== id));
+		setAuthors(authors.filter((author) => author.id !== id));
+		// dispatch(deleteAuthor(authorObj));
 	};
 
 	const handleDeleteAuthor = ({ id, name }) => {
@@ -96,8 +131,10 @@ const CreateCourse = () => {
 			name,
 		};
 
-		setCourseAuthors([...courseAuthors].filter((author) => author.id !== id));
-		setAuthors([...authorsList, deletedAuthor]);
+		setCourseAuthors(courseAuthors.filter((author) => author.id !== id));
+
+		setAuthors([...authors, deletedAuthor]);
+		// dispatch(addAuthor(deletedAuthor));
 	};
 
 	const handleNumberInput = ({ target: { value } }) => {
@@ -144,7 +181,7 @@ const CreateCourse = () => {
 					<div className={styles.authors}>
 						<h3>Authors</h3>
 						<ul>
-							{authorsList.map((author) => (
+							{authors.map((author) => (
 								<li key={author.id}>
 									<span>{author.name}</span>
 									<Button

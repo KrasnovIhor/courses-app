@@ -6,8 +6,9 @@ import { Link } from 'react-router-dom';
 import { Button } from '../../common/Button/Button';
 import { Input } from '../../common/Input/Input';
 
+import { registration } from '../../services';
+
 import {
-	API,
 	LABEL_TEXT_EMAIL,
 	LABEL_TEXT_NAME,
 	LABEL_TEXT_PASSWORD,
@@ -28,28 +29,24 @@ const Registration = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+
 		const newUser = {
 			name,
 			password,
 			email,
 		};
 
-		const response = await fetch(`${API}/register`, {
-			method: 'POST',
-			body: JSON.stringify(newUser),
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
-		const result = await response.json();
+		try {
+			const response = await registration(newUser);
 
-		if (result.successful) {
-			history.push('/login');
-		} else {
-			alert('Something went wrong');
+			if (!response.data.successful && response.status !== 201) {
+				alert('Something went wrong');
+			} else {
+				history.push('/login');
+			}
+		} catch (error) {
+			console.error(error);
 		}
-
-		console.log(result);
 	};
 	return (
 		<div className={styles.registrtion}>

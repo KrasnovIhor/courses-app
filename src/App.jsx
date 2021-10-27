@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+
+import { useSelector } from 'react-redux';
+
+import { useLocation } from 'react-router-dom';
+
+import { getUser } from './store/selectors';
 
 import Courses from './components/Courses/Courses';
 import Header from './components/Header/Header';
@@ -10,35 +15,33 @@ import Login from './components/Login/Login';
 
 import { Switch, Route, Redirect } from 'react-router-dom';
 
+// import { fetchCoursesAll, fetchUser } from './services';
+
 import './App.scss';
 import 'normalize.css';
+import '@fortawesome/fontawesome-free/css/all.css';
 
 const App = () => {
-	const [loggedIn, setLoggedIn] = useState(false);
+	const [isLoggedIn, setLoggedIn] = useState(false);
 
-	const history = useHistory();
+	const userInfo = useSelector(getUser);
+
 	const location = useLocation();
 
 	useEffect(() => {
-		try {
-			const token = localStorage.getItem('token');
-
-			if (!token) {
-				setLoggedIn(false);
-			} else {
-				setLoggedIn(true);
-			}
-		} catch (error) {
-			console.error(error);
+		if (!userInfo.isAuth) {
+			setLoggedIn(false);
+		} else {
+			setLoggedIn(true);
 		}
-	}, [history]);
+	}, [userInfo]);
 	return (
 		<div className='container'>
 			<Header {...location} />
 			<Switch>
 				<Route exact path='/courses' component={Courses} />
 				<Route exact path='/'>
-					{loggedIn ? <Redirect to='/courses' /> : <Redirect to='/login' />}
+					{isLoggedIn ? <Redirect to='/courses' /> : <Redirect to='/login' />}
 				</Route>
 				<Route path='/courses/add' component={CreateCourse} />
 				<Route path='/courses/:courseId' component={CourseInfo} />

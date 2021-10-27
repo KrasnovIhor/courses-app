@@ -1,10 +1,17 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useMemo, memo } from 'react';
 import { useHistory } from 'react-router';
+
+import { useSelector, useDispatch } from 'react-redux';
+
+import { fetchUser, logout } from '../../services';
+
+import { addUser, deleteUser } from '../../store/user/actionCreators';
+import { getUser } from '../../store/selectors';
 
 import { Link } from 'react-router-dom';
 
 import { Button } from '../../common/Button/Button';
-import { API, BUTTON_TEXT_LOGOUT } from '../../constants';
+import { BUTTON_TEXT_LOGOUT } from '../../constants';
 
 import { Logo } from './components/Logo/Logo';
 
@@ -13,33 +20,26 @@ import styles from './Header.module.scss';
 import PropTypes from 'prop-types';
 
 const Header = ({ pathname }) => {
-	const [visible, setVisible] = useState(false);
-	const [userName, setUserName] = useState('');
-
 	const history = useHistory();
 
-	const buttonVisibility = useMemo(
+	const userInfo = useSelector(getUser);
+	const dispatch = useDispatch();
+
+	const visible = useMemo(
 		() => pathname === '/login' || pathname === '/registration',
 		[pathname]
 	);
 
 	useEffect(() => {
-		setVisible(buttonVisibility);
-	}, [buttonVisibility]);
+		if (userInfo.isAuth) return;
 
-	useEffect(() => {
 		const myFetch = async () => {
 			try {
 				const token = localStorage.getItem('token');
-				if (token) {
-					const response = await fetch(`${API}/users/me`, {
-						headers: {
-							Authorization: token,
-						},
-					});
-					const result = await response.json();
 
-					setUserName(result.result.name);
+				if (token) {
+					const user = await fetchUser(token);
+					dispatch(addUser(user));
 				}
 			} catch (error) {
 				console.error(error);
@@ -47,22 +47,27 @@ const Header = ({ pathname }) => {
 		};
 
 		myFetch();
-	}, []);
+	}, [userInfo, dispatch]);
 
-	const handleLogout = () => {
+	const handleLogout = async () => {
+		const token = localStorage.getItem('token');
+
+		await logout(token);
+
 		localStorage.removeItem('token');
+		dispatch(deleteUser());
 		history.push('/login');
 	};
 
 	return (
 		<header className={styles.header}>
-			<Link to='/courses'>
+			<Link to='/'>
 				<Logo />
 			</Link>
 			<div className={styles.info}>
 				{!visible && (
 					<>
-						<p>{userName}</p>
+						<p>{userInfo.name}</p>
 						<Button onClick={handleLogout} children={BUTTON_TEXT_LOGOUT} />
 					</>
 				)}
@@ -75,4 +80,4 @@ Header.propTypes = {
 	pathname: PropTypes.string.isRequired,
 };
 
-export default Header;
+export default memo(Header);

@@ -1,6 +1,14 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { mockedCoursesList, mockedAuthorsList } from '../../constants';
+// import { mockedCoursesList, mockedAuthorsList } from '../../constants';
+
+import { fetchCoursesAll, fetchAuthors } from '../../services';
+
+import { addAuthors } from '../../store/authors/actionCreators';
+import { addCoursesAll } from '../../store/courses/actionCreators';
+
+import { getCourses, getAuthors } from '../../store/selectors';
 
 import CourseCard from './components/CourseCard/CourseCard';
 import SearchBar from './components/SearchBar/SearchBar';
@@ -10,13 +18,42 @@ import styles from './Courses.module.scss';
 const Courses = () => {
 	const [searchQuery, setSearchQuery] = useState('');
 
+	const courses = useSelector(getCourses);
+	const authors = useSelector(getAuthors);
+
+	const dispatch = useDispatch();
+
 	const regex = useMemo(() => new RegExp(searchQuery, 'gi'), [searchQuery]);
 
-	const searchedCourses = mockedCoursesList.filter(
+	const searchedCourses = courses.filter(
 		(course) => course.title.match(regex) || course.id.match(regex)
 	);
 
-	const list = !searchQuery ? mockedCoursesList : searchedCourses;
+	const list = !searchQuery ? courses : searchedCourses;
+
+	useEffect(() => {
+		const myFetch = async () => {
+			if (!courses.length) {
+				const fetchedCourses = await fetchCoursesAll();
+
+				dispatch(addCoursesAll(fetchedCourses));
+			}
+		};
+
+		myFetch();
+	}, [dispatch, courses.length]);
+
+	useEffect(() => {
+		const myFetch = async () => {
+			if (!authors.length) {
+				const fetchedAuthors = await fetchAuthors();
+
+				dispatch(addAuthors(fetchedAuthors));
+			}
+		};
+
+		myFetch();
+	}, [dispatch, authors.length]);
 
 	return (
 		<div className={styles.courses}>
@@ -24,7 +61,7 @@ const Courses = () => {
 			<ul>
 				{list.map((course) => (
 					<li key={course.id}>
-						<CourseCard course={course} authorsList={mockedAuthorsList} />
+						<CourseCard course={course} authorsList={authors} />
 					</li>
 				))}
 			</ul>
