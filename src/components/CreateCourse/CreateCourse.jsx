@@ -50,26 +50,6 @@ const CreateCourse = () => {
 
 	const history = useHistory();
 
-	useEffect(() => {
-		const myFetch = async () => {
-			if (!authorsList.length) {
-				const fetchedAuthors = await fetchAuthors();
-
-				setAuthors(fetchedAuthors);
-
-				dispatch(addAuthors(fetchedAuthors));
-			}
-		};
-
-		myFetch();
-	}, [dispatch, authorsList]);
-
-	useEffect(() => {
-		if (authorsList.length) {
-			setAuthors(authorsList);
-		}
-	}, []);
-
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
@@ -141,6 +121,27 @@ const CreateCourse = () => {
 		if (value < 0) return;
 		setDuration(value);
 	};
+
+	useEffect(() => {
+		const myFetch = async () => {
+			if (!authorsList.length) {
+				const fetchedAuthors = await fetchAuthors();
+
+				setAuthors(fetchedAuthors);
+
+				dispatch(addAuthors(fetchedAuthors));
+			}
+		};
+
+		myFetch();
+	}, [dispatch, authorsList]);
+
+	useEffect(() => {
+		if (authorsList.length) {
+			setAuthors(authorsList);
+		}
+		// eslint-disable-next-line
+	}, []);
 
 	return (
 		<div className={styles.createCourse}>

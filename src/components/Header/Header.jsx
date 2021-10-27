@@ -1,11 +1,11 @@
-import { useEffect, useMemo, memo } from 'react';
+import { useMemo, memo } from 'react';
 import { useHistory } from 'react-router';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import { fetchUser, logout } from '../../services';
+import { logout } from '../../services';
 
-import { addUser, deleteUser } from '../../store/user/actionCreators';
+import { deleteUser } from '../../store/user/actionCreators';
 import { getUser } from '../../store/selectors';
 
 import { Link } from 'react-router-dom';
@@ -22,7 +22,7 @@ import PropTypes from 'prop-types';
 const Header = ({ pathname }) => {
 	const history = useHistory();
 
-	const userInfo = useSelector(getUser);
+	const { name } = useSelector(getUser);
 	const dispatch = useDispatch();
 
 	const visible = useMemo(
@@ -30,24 +30,24 @@ const Header = ({ pathname }) => {
 		[pathname]
 	);
 
-	useEffect(() => {
-		if (userInfo.isAuth) return;
+	// useEffect(() => {
+	// 	if (isAuth) return;
 
-		const myFetch = async () => {
-			try {
-				const token = localStorage.getItem('token');
+	// 	const myFetch = async () => {
+	// 		try {
+	// 			const token = localStorage.getItem('token');
 
-				if (token) {
-					const user = await fetchUser(token);
-					dispatch(addUser(user));
-				}
-			} catch (error) {
-				console.error(error);
-			}
-		};
+	// 			if (token) {
+	// 				const user = await fetchUser(token);
+	// 				dispatch(addUser(user));
+	// 			}
+	// 		} catch (error) {
+	// 			console.error(error);
+	// 		}
+	// 	};
 
-		myFetch();
-	}, [userInfo, dispatch]);
+	// 	myFetch();
+	// }, [isAuth, dispatch]);
 
 	const handleLogout = async () => {
 		const token = localStorage.getItem('token');
@@ -67,7 +67,7 @@ const Header = ({ pathname }) => {
 			<div className={styles.info}>
 				{!visible && (
 					<>
-						<p>{userInfo.name}</p>
+						<p>{name}</p>
 						<Button onClick={handleLogout} children={BUTTON_TEXT_LOGOUT} />
 					</>
 				)}

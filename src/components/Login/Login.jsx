@@ -44,14 +44,15 @@ const Login = () => {
 				status,
 				successful,
 			} = response;
-			const user = await fetchUser(token);
-
-			dispatch(addUser(user));
 
 			if (!successful && status !== 201) {
 				alert('Failed to login!');
 				return;
 			}
+
+			const user = await fetchUser(token);
+
+			dispatch(addUser(user));
 
 			localStorage.setItem('token', token);
 			history.push('/courses');
