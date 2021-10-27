@@ -1,4 +1,15 @@
-import { ADD_USER, ADD_USER_REQUEST, DELETE_USER } from './actionTypes';
+import {
+	ADD_USER,
+	ADD_USER_REQUEST,
+	DELETE_USER,
+	ADD_USER_REJECT,
+} from './actionTypes';
+
+export const addUserRequest = () => {
+	return {
+		type: ADD_USER_REQUEST,
+	};
+};
 
 export const addUser = (user) => {
 	return {
@@ -7,14 +18,14 @@ export const addUser = (user) => {
 	};
 };
 
-export const deleteUser = () => {
+export const addUserReject = () => {
 	return {
-		type: DELETE_USER,
+		type: ADD_USER_REJECT,
 	};
 };
 
-export const addUserRequest = () => {
+export const deleteUser = () => {
 	return {
-		type: ADD_USER_REQUEST,
+		type: DELETE_USER,
 	};
 };

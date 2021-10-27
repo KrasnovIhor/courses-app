@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -6,7 +6,11 @@ import { useLocation } from 'react-router-dom';
 
 import { fetchUser } from './services';
 
-import { addUser, addUserRequest } from './store/user/actionCreators';
+import {
+	addUser,
+	addUserRequest,
+	addUserReject,
+} from './store/user/actionCreators';
 import { getUser } from './store/selectors';
 
 import Courses from './components/Courses/Courses';
@@ -23,8 +27,6 @@ import 'normalize.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 const App = () => {
-	// const [isLoggedIn, setLoggedIn] = useState(true);
-
 	const { isAuth, isUserLoaded } = useSelector(getUser);
 
 	const dispatch = useDispatch();
@@ -45,24 +47,13 @@ const App = () => {
 					dispatch(addUser(user));
 				}
 			} catch (error) {
+				dispatch(addUserReject());
 				console.error(error);
 			}
 		};
 
 		myFetch();
 	}, [isAuth, dispatch]);
-
-	// useEffect(() => {
-	// 	const token = localStorage.getItem('token');
-
-	// 	console.log(token);
-
-	// 	if (!token) {
-	// 		setLoggedIn(false);
-	// 	} else {
-	// 		setLoggedIn(true);
-	// 	}
-	// }, []);
 
 	if (!isUserLoaded) {
 		return null;
@@ -72,6 +63,9 @@ const App = () => {
 		<div className='container'>
 			<Header {...location} />
 			<Switch>
+				{/* <Route path='/'>
+					{isAuth ? <Redirect exact to='/' /> : <Redirect to='/login' />}
+				</Route> */}
 				<Route exact path='/courses' component={Courses} />
 				<Route exact path='/'>
 					{isAuth ? <Redirect to='/courses' /> : <Redirect to='/login' />}

@@ -1,4 +1,9 @@
-import { ADD_USER, ADD_USER_REQUEST, DELETE_USER } from './actionTypes';
+import {
+	ADD_USER,
+	ADD_USER_REJECT,
+	ADD_USER_REQUEST,
+	DELETE_USER,
+} from './actionTypes';
 
 const initialState = {
 	isAuth: false,
@@ -23,6 +28,11 @@ export default function userReducer(state = initialState, { type, payload }) {
 				isUserLoaded: true,
 			};
 		}
+		case ADD_USER_REJECT:
+			return {
+				...initialState,
+				isUserLoaded: false,
+			};
 		case DELETE_USER:
 			return {
 				...initialState,
