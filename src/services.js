@@ -138,7 +138,7 @@ export const deleteCourseService = async (id, token) => {
  * @returns {Promise<array>}
  */
 
-export const fetchAuthors = async () => {
+export const fetchAuthorsService = async () => {
 	try {
 		const response = await axios.get(`${API}/authors/all`);
 

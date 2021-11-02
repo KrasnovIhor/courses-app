@@ -1,21 +1,21 @@
-import { addAuthorService, fetchAuthors } from '../../services';
+import { addAuthorService, fetchAuthorsService } from '../../services';
 
 import {
-	loadedAuthors,
+	loadAuthors,
 	receivedError,
-	fetchingAuthors,
+	fetchAuthors,
 	addAuthor,
 } from './actionCreators';
 
 export const fetchAuthorsThunk = async (dispatch) => {
 	try {
-		dispatch(fetchingAuthors());
+		dispatch(fetchAuthors());
 
 		const {
 			data: { result },
-		} = await fetchAuthors();
+		} = await fetchAuthorsService();
 
-		dispatch(loadedAuthors(result));
+		dispatch(loadAuthors(result));
 	} catch (error) {
 		dispatch(receivedError());
 		console.error(error);

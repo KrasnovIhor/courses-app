@@ -1,9 +1,8 @@
 import {
 	ADD_AUTHOR,
-	ADD_AUTHORS,
 	DELETE_AUTHOR,
 	FETCH_AUTHORS,
-	LOADED_AUTHORS,
+	LOAD_AUTHORS,
 	RECEIVE_ERROR,
 } from './actionTypes';
 
@@ -23,17 +22,12 @@ export default function authorsReducer(
 				...state,
 				isFetching: true,
 			};
-		case LOADED_AUTHORS:
+		case LOAD_AUTHORS:
 			return {
 				...state,
 				isFetching: false,
 				isError: false,
 				authors: payload,
-			};
-		case ADD_AUTHORS:
-			return {
-				...state,
-				authors: [...state.authors, ...payload],
 			};
 		case ADD_AUTHOR:
 			return {

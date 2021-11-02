@@ -32,6 +32,13 @@ export const fetchCoursesThunk = async (dispatch) => {
 	}
 };
 
+/**
+ *
+ * @param {object} course
+ * @param {string} token
+ * @returns {Function}
+ */
+
 export const addCourseThunk = (course, token) => {
 	return async (dispatch) => {
 		try {
@@ -53,6 +60,14 @@ export const addCourseThunk = (course, token) => {
 	};
 };
 
+/**
+ *
+ * @param {string} id
+ * @param {object} course
+ * @param {string} token
+ * @returns {Function}
+ */
+
 export const updateCourseThunk = (id, course, token) => {
 	return async (dispatch) => {
 		try {
@@ -73,6 +88,13 @@ export const updateCourseThunk = (id, course, token) => {
 		}
 	};
 };
+
+/**
+ *
+ * @param {string} id
+ * @param {string} token
+ * @returns {Function}
+ */
 
 export const deleteCourseThunk = (id, token) => {
 	return async (dispatch) => {
