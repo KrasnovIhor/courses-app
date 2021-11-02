@@ -22,32 +22,13 @@ import PropTypes from 'prop-types';
 const Header = ({ pathname }) => {
 	const history = useHistory();
 
-	const { name } = useSelector(getUser);
+	const { name, role } = useSelector(getUser);
 	const dispatch = useDispatch();
 
 	const visible = useMemo(
 		() => pathname === '/login' || pathname === '/registration',
 		[pathname]
 	);
-
-	// useEffect(() => {
-	// 	if (isAuth) return;
-
-	// 	const myFetch = async () => {
-	// 		try {
-	// 			const token = localStorage.getItem('token');
-
-	// 			if (token) {
-	// 				const user = await fetchUser(token);
-	// 				dispatch(addUser(user));
-	// 			}
-	// 		} catch (error) {
-	// 			console.error(error);
-	// 		}
-	// 	};
-
-	// 	myFetch();
-	// }, [isAuth, dispatch]);
 
 	const handleLogout = async () => {
 		const token = localStorage.getItem('token');
@@ -56,6 +37,7 @@ const Header = ({ pathname }) => {
 
 		localStorage.removeItem('token');
 		dispatch(deleteUser());
+
 		history.push('/login');
 	};
 
@@ -67,7 +49,7 @@ const Header = ({ pathname }) => {
 			<div className={styles.info}>
 				{!visible && (
 					<>
-						<p>{name}</p>
+						<p>{role === 'admin' ? 'Admin' : name}</p>
 						<Button onClick={handleLogout} children={BUTTON_TEXT_LOGOUT} />
 					</>
 				)}

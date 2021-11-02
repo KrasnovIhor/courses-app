@@ -1,17 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useHistory } from 'react-router';
-
+import { useHistory, useParams } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { fetchAuthors } from '../../services';
+import { addAuthorThunk, fetchAuthorsThunk } from '../../store/authors/thunk';
+import { addCourseThunk, updateCourseThunk } from '../../store/courses/thunk';
 
-import { addAuthors, addAuthor } from '../../store/authors/actionCreators';
-import { addCourse } from '../../store/courses/actionCreators';
-
-import moment from 'moment';
-import { v4 as uuidv4 } from 'uuid';
-
-import { getAuthors } from '../../store/selectors';
+import { getAuthors, getCourses, getUser } from '../../store/selectors';
 
 import { Button } from '../../common/Button/Button';
 import { Input } from '../../common/Input/Input';
@@ -23,6 +17,7 @@ import {
 	BUTTON_TEXT_ADD_AUTHOR,
 	BUTTON_TEXT_CREATE_AUTHOR,
 	BUTTON_TEXT_CREATE_COURSE,
+	BUTTON_TEXT_UPDATE_COURSE,
 	BUTTON_TEXT_DELETE_AUTHOR,
 	LABEL_TEXT_TITLE,
 	LABEL_TEXT_DESCRIPTION,
@@ -34,31 +29,33 @@ import {
 	INPUT_PLACEHOLDER_AUTHOR_NAME,
 } from '../../constants';
 
-import styles from './CreateCourse.module.scss';
+import styles from './CourseForm.module.scss';
 
-const CreateCourse = () => {
+const CourseForm = () => {
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [authorName, setAuthorName] = useState('');
 	const [authors, setAuthors] = useState([]);
 	const [courseAuthors, setCourseAuthors] = useState([]);
 	const [duration, setDuration] = useState('');
+	const [isUpdating, setUpdating] = useState(false);
 
+	const coursesList = useSelector(getCourses);
 	const authorsList = useSelector(getAuthors);
+	const { token } = useSelector(getUser);
 
 	const dispatch = useDispatch();
 
 	const history = useHistory();
+	const { courseId } = useParams();
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
 		const authors = courseAuthors.map((author) => author.id);
 		const course = {
-			id: uuidv4(),
 			title,
 			description,
-			creationDate: moment().format('D/M/YYYY'),
 			duration: parseInt(duration, 10),
 			authors,
 		};
@@ -70,8 +67,9 @@ const CreateCourse = () => {
 			}
 		}
 
-		// await fetchCourseAdd(course);
-		dispatch(addCourse(course));
+		isUpdating
+			? dispatch(updateCourseThunk(courseId, course, token))
+			: dispatch(addCourseThunk(course, token));
 
 		history.push('/courses');
 	};
@@ -82,14 +80,8 @@ const CreateCourse = () => {
 			return;
 		}
 
-		const newAuthor = {
-			id: uuidv4(),
-			name: authorName,
-		};
-
-		dispatch(addAuthor(newAuthor));
-
-		setAuthors([...authors, newAuthor]);
+		dispatch(addAuthorThunk(authorName, token));
+		setAuthors(authorsList);
 
 		setAuthorName('');
 	};
@@ -102,7 +94,6 @@ const CreateCourse = () => {
 
 		setCourseAuthors([...courseAuthors, authorObj]);
 		setAuthors(authors.filter((author) => author.id !== id));
-		// dispatch(deleteAuthor(authorObj));
 	};
 
 	const handleDeleteAuthor = ({ id, name }) => {
@@ -114,7 +105,6 @@ const CreateCourse = () => {
 		setCourseAuthors(courseAuthors.filter((author) => author.id !== id));
 
 		setAuthors([...authors, deletedAuthor]);
-		// dispatch(addAuthor(deletedAuthor));
 	};
 
 	const handleNumberInput = ({ target: { value } }) => {
@@ -123,25 +113,48 @@ const CreateCourse = () => {
 	};
 
 	useEffect(() => {
-		const myFetch = async () => {
-			if (!authorsList.length) {
-				const fetchedAuthors = await fetchAuthors();
-
-				setAuthors(fetchedAuthors);
-
-				dispatch(addAuthors(fetchedAuthors));
-			}
-		};
-
-		myFetch();
-	}, [dispatch, authorsList]);
-
-	useEffect(() => {
 		if (authorsList.length) {
 			setAuthors(authorsList);
 		}
 		// eslint-disable-next-line
 	}, []);
+
+	useEffect(() => {
+		if (!authorsList.length) {
+			dispatch(fetchAuthorsThunk);
+			setAuthors(authorsList);
+		}
+	}, [dispatch, authorsList]);
+
+	useEffect(() => {
+		if (history.location.pathname.includes('update')) {
+			setUpdating(true);
+		} else {
+			setUpdating(false);
+		}
+	}, [history.location.pathname]);
+
+	useEffect(() => {
+		if (isUpdating) {
+			const { title, description, duration, authors } = coursesList.find(
+				(course) => course.id === courseId
+			);
+			const newCourseAuthors = authorsList.filter((author) =>
+				authors.find((el) => author.id === el)
+			);
+			const newAuthors = authorsList.filter(
+				(author) => !authors.find((el) => author.id === el) && author
+			);
+
+			setTitle(title);
+			setDescription(description);
+			setDuration(duration);
+			setCourseAuthors(newCourseAuthors);
+			setAuthors(newAuthors);
+		} else {
+			setAuthors(authorsList);
+		}
+	}, [courseId, coursesList, isUpdating, authorsList]);
 
 	return (
 		<div className={styles.createCourse}>
@@ -154,7 +167,12 @@ const CreateCourse = () => {
 						placeholder={INPUT_PLACEHOLDER_TITLE}
 						id='title'
 					/>
-					<Button type='submit' children={BUTTON_TEXT_CREATE_COURSE} />
+					<Button
+						type='submit'
+						children={
+							isUpdating ? BUTTON_TEXT_UPDATE_COURSE : BUTTON_TEXT_CREATE_COURSE
+						}
+					/>
 				</div>
 				<Textarea
 					onChange={(e) => setDescription(e.target.value)}
@@ -183,8 +201,8 @@ const CreateCourse = () => {
 						<h3>Authors</h3>
 						<ul>
 							{authors.map((author) => (
-								<li key={author.id}>
-									<span>{author.name}</span>
+								<li key={author?.id}>
+									<span>{author?.name}</span>
 									<Button
 										onClick={() => handleCourseAuthor(author)}
 										type='button'
@@ -212,8 +230,8 @@ const CreateCourse = () => {
 						{courseAuthors.length ? (
 							<ul>
 								{courseAuthors.map((author) => (
-									<li key={author.id}>
-										<span>{author.name}</span>
+									<li key={author?.id}>
+										<span>{author?.name}</span>
 										<Button
 											onClick={() => handleDeleteAuthor(author)}
 											children={BUTTON_TEXT_DELETE_AUTHOR}
@@ -232,4 +250,4 @@ const CreateCourse = () => {
 	);
 };
 
-export default CreateCourse;
+export default CourseForm;

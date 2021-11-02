@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+
+import { getUser } from '../../../../store/selectors';
 
 import { Input } from '../../../../common/Input/Input';
 import { Button } from '../../../../common/Button/Button';
@@ -18,6 +21,8 @@ import PropTypes from 'prop-types';
 const SearchBar = ({ handleSearch }) => {
 	const [inputData, setInputData] = useState('');
 
+	const user = useSelector(getUser);
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		handleSearch(inputData);
@@ -34,9 +39,11 @@ const SearchBar = ({ handleSearch }) => {
 				/>
 				<Button type='submit' children={BUTTON_TEXT_SEARCH} />
 			</div>
-			<Link to='/courses/add'>
-				<Button type='button' children={BUTTON_TEXT_NEW_COURSE} />
-			</Link>
+			{user.role === 'admin' && (
+				<Link to='/courses/add'>
+					<Button type='button' children={BUTTON_TEXT_NEW_COURSE} />
+				</Link>
+			)}
 		</form>
 	);
 };

@@ -1,16 +1,21 @@
 import {
 	ADD_USER,
-	ADD_USER_REQUEST,
+	FETCH_USER,
 	DELETE_USER,
-	ADD_USER_REJECT,
+	RECEIVE_ERROR,
 } from './actionTypes';
 
-export const addUserRequest = () => {
+export const fetchUser = () => {
 	return {
-		type: ADD_USER_REQUEST,
+		type: FETCH_USER,
 	};
 };
 
+/**
+ *
+ * @param {object} user
+ * @returns {object}
+ */
 export const addUser = (user) => {
 	return {
 		type: ADD_USER,
@@ -18,9 +23,9 @@ export const addUser = (user) => {
 	};
 };
 
-export const addUserReject = () => {
+export const receiveError = () => {
 	return {
-		type: ADD_USER_REJECT,
+		type: RECEIVE_ERROR,
 	};
 };
 

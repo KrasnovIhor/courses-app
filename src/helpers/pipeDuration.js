@@ -1,3 +1,8 @@
+/**
+ *
+ * @param {Number} duration
+ * @returns {String}
+ */
 export const pipeDuration = (duration) => {
 	const hours = duration / 60,
 		rhours = formatNumber(Math.floor(hours)),
@@ -7,6 +12,11 @@ export const pipeDuration = (duration) => {
 	return `${rhours}:${rminutes}`;
 };
 
+/**
+ *
+ * @param {Number} number
+ * @returns {String}
+ */
 const formatNumber = (number) => {
 	return number.toLocaleString('en-US', {
 		minimumIntegerDigits: 2,

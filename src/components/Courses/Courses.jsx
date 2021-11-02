@@ -1,14 +1,15 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-// import { mockedCoursesList, mockedAuthorsList } from '../../constants';
+import { fetchCoursesThunk } from '../../store/courses/thunk';
+import { fetchAuthorsThunk } from '../../store/authors/thunk';
 
-import { fetchCoursesAll, fetchAuthors } from '../../services';
-
-import { addAuthors } from '../../store/authors/actionCreators';
-import { addCoursesAll } from '../../store/courses/actionCreators';
-
-import { getCourses, getAuthors } from '../../store/selectors';
+import {
+	getCourses,
+	getAuthors,
+	isFetchingCourses,
+	isErrorCourses,
+} from '../../store/selectors';
 
 import CourseCard from './components/CourseCard/CourseCard';
 import SearchBar from './components/SearchBar/SearchBar';
@@ -18,6 +19,8 @@ import styles from './Courses.module.scss';
 const Courses = () => {
 	const [searchQuery, setSearchQuery] = useState('');
 
+	const isFetching = useSelector(isFetchingCourses);
+	const isError = useSelector(isErrorCourses);
 	const courses = useSelector(getCourses);
 	const authors = useSelector(getAuthors);
 
@@ -32,28 +35,19 @@ const Courses = () => {
 	const list = !searchQuery ? courses : searchedCourses;
 
 	useEffect(() => {
-		const myFetch = async () => {
-			if (!courses.length) {
-				const fetchedCourses = await fetchCoursesAll();
+		if (!courses.length) {
+			dispatch(fetchCoursesThunk);
+			dispatch(fetchAuthorsThunk);
+		}
+	}, [courses.length, dispatch]);
 
-				dispatch(addCoursesAll(fetchedCourses));
-			}
-		};
+	if (isFetching) {
+		return null;
+	}
 
-		myFetch();
-	}, [dispatch, courses.length]);
-
-	useEffect(() => {
-		const myFetch = async () => {
-			if (!authors.length) {
-				const fetchedAuthors = await fetchAuthors();
-
-				dispatch(addAuthors(fetchedAuthors));
-			}
-		};
-
-		myFetch();
-	}, [dispatch, authors.length]);
+	if (isError) {
+		return <h1>Error while loading courses!</h1>;
+	}
 
 	return (
 		<div className={styles.courses}>

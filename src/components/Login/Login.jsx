@@ -3,14 +3,12 @@ import { useHistory } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
 
-import { addUser } from '../../store/user/actionCreators';
-
 import { Link } from 'react-router-dom';
 
 import { Button } from '../../common/Button/Button';
 import { Input } from '../../common/Input/Input';
 
-import { fetchUser, login } from '../../services';
+import { loginThunk } from '../../store/user/thunk';
 
 import {
 	LABEL_TEXT_EMAIL,
@@ -30,35 +28,16 @@ const Login = () => {
 
 	const history = useHistory();
 
-	const handleSubmit = async (e) => {
+	const handleSubmit = (e) => {
 		e.preventDefault();
+		const user = {
+			email,
+			password,
+		};
 
-		try {
-			const userLoggedIn = {
-				email,
-				password,
-			};
-			const response = await login(userLoggedIn);
-			const {
-				data: { result: token },
-				status,
-				successful,
-			} = response;
+		dispatch(loginThunk(user));
 
-			if (!successful && status !== 201) {
-				alert('Failed to login!');
-				return;
-			}
-
-			const user = await fetchUser(token);
-
-			dispatch(addUser(user));
-
-			localStorage.setItem('token', token);
-			history.push('/courses');
-		} catch (error) {
-			console.error(error);
-		}
+		history.push('/courses');
 	};
 	return (
 		<div className={styles.login}>

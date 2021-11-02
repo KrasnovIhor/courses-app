@@ -1,14 +1,16 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
 
-import { deleteCourse } from '../../../../store/courses/actionCreators';
+import { getUser } from '../../../../store/selectors';
+
+import { deleteCourseThunk } from '../../../../store/courses/thunk';
 
 import { Button } from '../../../../common/Button/Button';
 import { BUTTON_TEXT_SHOW_COURSE } from '../../../../constants';
 
 import { dateGenerator } from '../../../../helpers/dateGenerator';
-import { pickAuthors } from '../../../../helpers/pickAuthors';
+import { pickAuthorsToString } from '../../../../helpers/pickAuthors';
 import { pipeDuration } from '../../../../helpers/pipeDuration';
 
 import PropTypes from 'prop-types';
@@ -22,10 +24,12 @@ const CourseCard = ({
 	const removeIcon = <i className='fas fa-trash'></i>;
 	const editIcon = <i className='fas fa-pen'></i>;
 
+	const { role, token } = useSelector(getUser);
+
 	const dispatch = useDispatch();
 
 	const handleDeleteCourse = () => {
-		dispatch(deleteCourse(id));
+		dispatch(deleteCourseThunk(id, token));
 	};
 
 	return (
@@ -37,7 +41,7 @@ const CourseCard = ({
 			<div className={styles.info}>
 				<ul>
 					<li>
-						<span>Author:</span> {pickAuthors(authors, authorsList)}
+						<span>Author:</span> {pickAuthorsToString(authors, authorsList)}
 					</li>
 					<li>
 						<span>Duration:</span> {pipeDuration(duration)} hours
@@ -50,8 +54,14 @@ const CourseCard = ({
 					<Link className={styles.button} to={`courses/${id}`}>
 						<Button children={BUTTON_TEXT_SHOW_COURSE} />
 					</Link>
-					<Button children={editIcon} />
-					<Button onClick={handleDeleteCourse} children={removeIcon} />
+					{role === 'admin' && (
+						<>
+							<Link to={`/courses/update/${id}`}>
+								<Button children={editIcon} />
+							</Link>
+							<Button onClick={handleDeleteCourse} children={removeIcon} />
+						</>
+					)}
 				</div>
 			</div>
 		</div>

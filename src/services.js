@@ -1,16 +1,23 @@
 import axios from 'axios';
 import { API } from './constants';
 
-export const fetchUser = async (token) => {
+/**
+ *
+ * @param {String} token
+ * @returns {Promise<object>}
+ */
+export const fetchUserService = async (token) => {
 	try {
-		const response = await axios.get(`${API}/users/me`, {
+		const {
+			data: { result },
+		} = await axios.get(`${API}/users/me`, {
 			headers: {
 				Authorization: token,
 			},
 		});
 
 		const user = {
-			...response.data.result,
+			...result,
 			token,
 		};
 
@@ -18,9 +25,15 @@ export const fetchUser = async (token) => {
 	} catch (error) {
 		console.error(error);
 	}
+
+	return {};
 };
 
-export const fetchCoursesAll = async () => {
+/**
+ *
+ * @returns {Promise<[object]>}
+ */
+export const fetchCoursesThunkAll = async () => {
 	try {
 		const response = await axios.get(`${API}/courses/all`);
 		const {
@@ -31,7 +44,14 @@ export const fetchCoursesAll = async () => {
 	} catch (error) {
 		console.error(error);
 	}
+	return [];
 };
+
+/**
+ *
+ * @param {String} id
+ * @returns {Promise<object>}
+ */
 
 export const fetchCourse = async (id) => {
 	try {
@@ -45,27 +65,113 @@ export const fetchCourse = async (id) => {
 	} catch (error) {
 		console.error(error);
 	}
+	return {};
 };
 
-export const fetchCourseAdd = async (course) => {
+/**
+ *
+ * @param {object} course
+ * @returns {Promise<object>}
+ */
+export const fetchCourseAdd = async (course, token) => {
 	try {
-		const response = await axios.post(`${API}/courses/add`, course);
-		console.log(response);
+		const headers = {
+			Authorization: token,
+		};
+
+		const response = await axios.post(`${API}/courses/add`, course, {
+			headers,
+		});
+
+		return response;
 	} catch (error) {
 		console.error(error);
 	}
 };
+
+/**
+ *
+ * @param {String} id
+ * @param {object} course
+ * @param {String} token
+ * @returns {Promise<object>}
+ */
+export const updateCourseService = async (id, course, token) => {
+	try {
+		const headers = {
+			Authorization: token,
+		};
+
+		const response = await axios.put(`${API}/courses/${id}`, course, {
+			headers,
+		});
+
+		return response;
+	} catch (error) {
+		console.error(error);
+	}
+};
+
+/**
+ *
+ * @param {String} id
+ * @param {String} token
+ * @returns {Promise<object>}
+ */
+export const deleteCourseService = async (id, token) => {
+	try {
+		const headers = {
+			Authorization: token,
+		};
+
+		const response = await axios.delete(`${API}/courses/${id}`, { headers });
+
+		return response;
+	} catch (error) {
+		console.error(error);
+	}
+	return {};
+};
+
+/**
+ *
+ * @returns {Promise<array>}
+ */
 
 export const fetchAuthors = async () => {
 	try {
 		const response = await axios.get(`${API}/authors/all`);
 
-		return response.data.result;
+		return response;
+	} catch (error) {
+		console.error(error);
+	}
+	return [];
+};
+
+export const addAuthorService = async (name, token) => {
+	try {
+		const headers = {
+			Authorization: token,
+		};
+
+		const response = await axios.post(
+			`${API}/authors/add`,
+			{ name },
+			{ headers }
+		);
+
+		return response;
 	} catch (error) {
 		console.error(error);
 	}
 };
 
+/**
+ *
+ * @param {Object} newUser
+ * @returns {Promise<object>}
+ */
 export const registration = async (newUser) => {
 	try {
 		const response = await axios.post(`${API}/register`, newUser);
@@ -76,8 +182,14 @@ export const registration = async (newUser) => {
 
 		console.error(error);
 	}
+	return {};
 };
 
+/**
+ *
+ * @param {Object} user
+ * @returns {Promise<object>}
+ */
 export const login = async (user) => {
 	try {
 		const response = await axios.post(`${API}/login`, user);
@@ -88,12 +200,21 @@ export const login = async (user) => {
 
 		console.error(error);
 	}
+	return {};
 };
 
+/**
+ *
+ * @param {String} token
+ */
 export const logout = async (token) => {
-	await axios.delete(`${API}/logout`, {
-		headers: {
-			Authorization: token,
-		},
-	});
+	try {
+		await axios.delete(`${API}/logout`, {
+			headers: {
+				Authorization: token,
+			},
+		});
+	} catch (error) {
+		console.error(error);
+	}
 };

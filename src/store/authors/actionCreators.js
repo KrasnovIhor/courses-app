@@ -1,4 +1,30 @@
-import { ADD_AUTHOR, ADD_AUTHORS, DELETE_AUTHOR } from './actionTypes';
+import {
+	ADD_AUTHOR,
+	ADD_AUTHORS,
+	DELETE_AUTHOR,
+	FETCH_AUTHORS,
+	LOADED_AUTHORS,
+	RECEIVE_ERROR,
+} from './actionTypes';
+
+export const fetchingAuthors = () => {
+	return {
+		type: FETCH_AUTHORS,
+	};
+};
+
+export const receivedError = () => {
+	return {
+		type: RECEIVE_ERROR,
+	};
+};
+
+export const loadedAuthors = (authors) => {
+	return {
+		type: LOADED_AUTHORS,
+		payload: authors,
+	};
+};
 
 export const addAuthors = (authors) => {
 	return {

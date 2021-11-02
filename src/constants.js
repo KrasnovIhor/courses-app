@@ -61,6 +61,7 @@ export const BUTTON_TEXT_SEARCH = 'Search';
 export const BUTTON_TEXT_NEW_COURSE = 'Add New course';
 export const BUTTON_TEXT_SHOW_COURSE = 'Show course';
 export const BUTTON_TEXT_CREATE_COURSE = 'Create course';
+export const BUTTON_TEXT_UPDATE_COURSE = 'Update course';
 export const BUTTON_TEXT_CREATE_AUTHOR = 'Create author';
 export const BUTTON_TEXT_ADD_AUTHOR = 'Add author';
 export const BUTTON_TEXT_DELETE_AUTHOR = 'Delete author';

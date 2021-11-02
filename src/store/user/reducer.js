@@ -1,37 +1,39 @@
 import {
 	ADD_USER,
-	ADD_USER_REJECT,
-	ADD_USER_REQUEST,
+	RECEIVE_ERROR,
+	FETCH_USER,
 	DELETE_USER,
 } from './actionTypes';
 
 const initialState = {
 	isAuth: false,
-	isUserLoaded: true,
+	isFetching: false,
+	isError: false,
 	name: '',
 	email: '',
 	token: '',
+	role: '',
 };
 
 export default function userReducer(state = initialState, { type, payload }) {
 	switch (type) {
-		case ADD_USER_REQUEST:
+		case FETCH_USER:
 			return {
 				...state,
-				isUserLoaded: false,
+				isFetching: true,
 			};
 		case ADD_USER: {
 			return {
 				...state,
 				...payload,
 				isAuth: true,
-				isUserLoaded: true,
+				isFetching: false,
 			};
 		}
-		case ADD_USER_REJECT:
+		case RECEIVE_ERROR:
 			return {
-				...initialState,
-				isUserLoaded: false,
+				...state,
+				isError: true,
 			};
 		case DELETE_USER:
 			return {
