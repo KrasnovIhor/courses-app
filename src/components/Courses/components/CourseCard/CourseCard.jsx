@@ -10,7 +10,7 @@ import { Button } from '../../../../common/Button/Button';
 import { BUTTON_TEXT_SHOW_COURSE } from '../../../../constants';
 
 import { dateGenerator } from '../../../../helpers/dateGenerator';
-import { pickAuthorsToString } from '../../../../helpers/pickAuthors';
+import { pickAuthors, authorsToString } from '../../../../helpers/pickAuthors';
 import { pipeDuration } from '../../../../helpers/pipeDuration';
 
 import PropTypes from 'prop-types';
@@ -41,7 +41,8 @@ const CourseCard = ({
 			<div className={styles.info}>
 				<ul>
 					<li>
-						<span>Author:</span> {pickAuthorsToString(authors, authorsList)}
+						<span>Author:</span>{' '}
+						{authorsToString(pickAuthors(authors, authorsList))}
 					</li>
 					<li>
 						<span>Duration:</span> {pipeDuration(duration)} hours

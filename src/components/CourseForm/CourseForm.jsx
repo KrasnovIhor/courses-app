@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useHistory, useParams } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -35,19 +35,25 @@ const CourseForm = () => {
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [authorName, setAuthorName] = useState('');
-	const [authors, setAuthors] = useState([]);
 	const [courseAuthors, setCourseAuthors] = useState([]);
 	const [duration, setDuration] = useState('');
-	const [isUpdating, setUpdating] = useState(false);
 
 	const coursesList = useSelector(getCourses);
 	const authorsList = useSelector(getAuthors);
 	const { token } = useSelector(getUser);
 
+	const availableToSelectAuthors = useMemo(() => {
+		return authorsList.filter((a) => {
+			return !courseAuthors.find((author) => author.id === a.id);
+		});
+	}, [authorsList, courseAuthors]);
+
 	const dispatch = useDispatch();
 
 	const history = useHistory();
 	const { courseId } = useParams();
+
+	const isUpdating = history.location.pathname.includes('update');
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -59,12 +65,15 @@ const CourseForm = () => {
 			duration: parseInt(duration, 10),
 			authors,
 		};
+		const errors = [];
 
-		for (const key in course) {
-			if (!course[key] || !authors.length) {
-				alert('All fields should be fill in!');
-				return;
-			}
+		Object.keys(course).forEach(
+			(key) => (!course[key] || !authors.length) && errors.push(key)
+		);
+
+		if (errors.length) {
+			alert('All fields should be fill in!');
+			return;
 		}
 
 		isUpdating
@@ -81,7 +90,6 @@ const CourseForm = () => {
 		}
 
 		dispatch(addAuthorThunk(authorName, token));
-		setAuthors(authorsList);
 
 		setAuthorName('');
 	};
@@ -93,18 +101,10 @@ const CourseForm = () => {
 		};
 
 		setCourseAuthors([...courseAuthors, authorObj]);
-		setAuthors(authors.filter((author) => author.id !== id));
 	};
 
 	const handleDeleteAuthor = ({ id, name }) => {
-		const deletedAuthor = {
-			id,
-			name,
-		};
-
 		setCourseAuthors(courseAuthors.filter((author) => author.id !== id));
-
-		setAuthors([...authors, deletedAuthor]);
 	};
 
 	const handleNumberInput = ({ target: { value } }) => {
@@ -113,26 +113,10 @@ const CourseForm = () => {
 	};
 
 	useEffect(() => {
-		if (authorsList.length) {
-			setAuthors(authorsList);
-		}
-		// eslint-disable-next-line
-	}, []);
-
-	useEffect(() => {
 		if (!authorsList.length) {
 			dispatch(fetchAuthorsThunk);
-			setAuthors(authorsList);
 		}
 	}, [dispatch, authorsList]);
-
-	useEffect(() => {
-		if (history.location.pathname.includes('update')) {
-			setUpdating(true);
-		} else {
-			setUpdating(false);
-		}
-	}, [history.location.pathname]);
 
 	useEffect(() => {
 		if (isUpdating) {
@@ -142,17 +126,11 @@ const CourseForm = () => {
 			const newCourseAuthors = authorsList.filter((author) =>
 				authors.find((el) => author.id === el)
 			);
-			const newAuthors = authorsList.filter(
-				(author) => !authors.find((el) => author.id === el) && author
-			);
 
 			setTitle(title);
 			setDescription(description);
 			setDuration(duration);
 			setCourseAuthors(newCourseAuthors);
-			setAuthors(newAuthors);
-		} else {
-			setAuthors(authorsList);
 		}
 	}, [courseId, coursesList, isUpdating, authorsList]);
 
@@ -200,7 +178,7 @@ const CourseForm = () => {
 					<div className={styles.authors}>
 						<h3>Authors</h3>
 						<ul>
-							{authors.map((author) => (
+							{availableToSelectAuthors.map((author) => (
 								<li key={author?.id}>
 									<span>{author?.name}</span>
 									<Button

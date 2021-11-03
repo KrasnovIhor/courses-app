@@ -25,16 +25,9 @@ export const pickAuthors = (courseAuthors = [], authorsList = []) => {
 
 /**
  *
- * @param {Array<string>} courseAuthors
- * @param {Array<object>} authorsList
+ * @param {Array<object>} authors
  * @returns {String}
  */
-
-export const pickAuthorsToString = (courseAuthors = [], authorsList = []) => {
-	return truncate(
-		pickAuthors(courseAuthors, authorsList)
-			.map((authorObj) => authorObj.name)
-			.join(', '),
-		35
-	);
+export const authorsToString = (authors = []) => {
+	return truncate(authors.map((authorObj) => authorObj.name).join(', '), 35);
 };
