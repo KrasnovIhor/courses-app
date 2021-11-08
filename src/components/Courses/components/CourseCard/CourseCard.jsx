@@ -33,21 +33,21 @@ const CourseCard = ({
 	};
 
 	return (
-		<div className={styles.wrapper}>
+		<div data-testid='course-card' className={styles.wrapper}>
 			<div className={styles.body}>
 				<h3>{title}</h3>
-				<p>{description}</p>
+				<p data-testid='description'>{description}</p>
 			</div>
 			<div className={styles.info}>
 				<ul>
-					<li>
+					<li data-testid='authors-list'>
 						<span>Author:</span>{' '}
 						{authorsToString(pickAuthors(authors, authorsList))}
 					</li>
-					<li>
+					<li data-testid='duration'>
 						<span>Duration:</span> {pipeDuration(duration)} hours
 					</li>
-					<li>
+					<li data-testid='created-at'>
 						<span>Created:</span> {dateGenerator(creationDate)}
 					</li>
 				</ul>

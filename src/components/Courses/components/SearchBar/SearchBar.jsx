@@ -40,7 +40,7 @@ const SearchBar = ({ handleSearch }) => {
 				<Button type='submit' children={BUTTON_TEXT_SEARCH} />
 			</div>
 			{user.role === 'admin' && (
-				<Link to='/courses/add'>
+				<Link data-testid='add-course-link' to='/courses/add'>
 					<Button type='button' children={BUTTON_TEXT_NEW_COURSE} />
 				</Link>
 			)}

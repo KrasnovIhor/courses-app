@@ -31,24 +31,6 @@ export const fetchUserService = async (token) => {
 
 /**
  *
- * @returns {Promise<[object]>}
- */
-export const fetchCoursesThunkAll = async () => {
-	try {
-		const response = await axios.get(`${API}/courses/all`);
-		const {
-			data: { result: courses },
-		} = response;
-
-		return courses;
-	} catch (error) {
-		console.error(error);
-	}
-	return [];
-};
-
-/**
- *
  * @param {String} id
  * @returns {Promise<object>}
  */

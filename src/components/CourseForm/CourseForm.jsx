@@ -103,7 +103,7 @@ const CourseForm = () => {
 		setCourseAuthors([...courseAuthors, authorObj]);
 	};
 
-	const handleDeleteAuthor = ({ id, name }) => {
+	const handleDeleteAuthor = ({ id }) => {
 		setCourseAuthors(courseAuthors.filter((author) => author.id !== id));
 	};
 
@@ -135,7 +135,7 @@ const CourseForm = () => {
 	}, [courseId, coursesList, isUpdating, authorsList]);
 
 	return (
-		<div className={styles.createCourse}>
+		<div data-testid='course-form' className={styles.createCourse}>
 			<form onSubmit={handleSubmit}>
 				<div className={styles.row}>
 					<Input
@@ -177,18 +177,23 @@ const CourseForm = () => {
 					</div>
 					<div className={styles.authors}>
 						<h3>Authors</h3>
-						<ul>
-							{availableToSelectAuthors.map((author) => (
-								<li key={author?.id}>
-									<span>{author?.name}</span>
-									<Button
-										onClick={() => handleCourseAuthor(author)}
-										type='button'
-										children={BUTTON_TEXT_ADD_AUTHOR}
-									/>
-								</li>
-							))}
-						</ul>
+						{availableToSelectAuthors.length ? (
+							<ul data-testid='all-authors'>
+								{availableToSelectAuthors.map((author) => (
+									<li key={author?.id}>
+										<span>{author?.name}</span>
+										<Button
+											onClick={() => handleCourseAuthor(author)}
+											type='button'
+											data-testid='add-course-author-button'
+											children={BUTTON_TEXT_ADD_AUTHOR}
+										/>
+									</li>
+								))}
+							</ul>
+						) : (
+							<p>Authors list is empty</p>
+						)}
 					</div>
 					<div className={styles.duration}>
 						<h3>Duration</h3>
@@ -206,20 +211,21 @@ const CourseForm = () => {
 					<div className={styles.courseAuthors}>
 						<h3>Course authors</h3>
 						{courseAuthors.length ? (
-							<ul>
+							<ul data-testid='course-authors'>
 								{courseAuthors.map((author) => (
 									<li key={author?.id}>
 										<span>{author?.name}</span>
 										<Button
 											onClick={() => handleDeleteAuthor(author)}
 											children={BUTTON_TEXT_DELETE_AUTHOR}
+											data-testid='delete-course-author-button'
 											type='button'
 										/>
 									</li>
 								))}
 							</ul>
 						) : (
-							<p>Authors list is empty</p>
+							<p>Course authors list is empty</p>
 						)}
 					</div>
 				</div>

@@ -50,9 +50,9 @@ const Courses = () => {
 	}
 
 	return (
-		<div className={styles.courses}>
+		<div data-testid='courses' className={styles.courses}>
 			<SearchBar handleSearch={setSearchQuery} />
-			<ul>
+			<ul data-testid='courses-container'>
 				{list.map((course) => (
 					<li key={course.id}>
 						<CourseCard course={course} authorsList={authors} />

@@ -49,7 +49,7 @@ const Header = ({ pathname }) => {
 			<div className={styles.info}>
 				{!visible && (
 					<>
-						<p>{role === 'admin' ? 'Admin' : name}</p>
+						<p data-testid='user-name'>{role === 'admin' ? 'Admin' : name}</p>
 						<Button onClick={handleLogout} children={BUTTON_TEXT_LOGOUT} />
 					</>
 				)}
