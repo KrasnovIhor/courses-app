@@ -2,8 +2,8 @@ import coursesReducer from '../reducer';
 import { addCourse, loadCourses } from '../actionCreators';
 
 describe('courseReducer tests', () => {
-	test('should return the initial state on init', () => {
-		const state = coursesReducer(undefined, { type: '@@INIT' });
+	test('should return the initial state', () => {
+		const state = coursesReducer(undefined, {});
 
 		expect(state).toEqual({
 			courses: [],
