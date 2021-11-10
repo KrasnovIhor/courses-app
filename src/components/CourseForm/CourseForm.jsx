@@ -179,13 +179,13 @@ const CourseForm = () => {
 						<h3>Authors</h3>
 						{availableToSelectAuthors.length ? (
 							<ul data-testid='all-authors'>
-								{availableToSelectAuthors.map((author) => (
+								{availableToSelectAuthors.map((author, i) => (
 									<li key={author?.id}>
 										<span>{author?.name}</span>
 										<Button
 											onClick={() => handleCourseAuthor(author)}
 											type='button'
-											data-testid='add-course-author-button'
+											data-testid={`add-course-author-button${i + 1}`}
 											children={BUTTON_TEXT_ADD_AUTHOR}
 										/>
 									</li>
@@ -212,13 +212,13 @@ const CourseForm = () => {
 						<h3>Course authors</h3>
 						{courseAuthors.length ? (
 							<ul data-testid='course-authors'>
-								{courseAuthors.map((author) => (
+								{courseAuthors.map((author, i) => (
 									<li key={author?.id}>
 										<span>{author?.name}</span>
 										<Button
 											onClick={() => handleDeleteAuthor(author)}
 											children={BUTTON_TEXT_DELETE_AUTHOR}
-											data-testid='delete-course-author-button'
+											data-testid={`delete-course-author-button${i + 1}`}
 											type='button'
 										/>
 									</li>

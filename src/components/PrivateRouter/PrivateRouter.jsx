@@ -1,8 +1,8 @@
 import { useSelector } from 'react-redux';
 
-import { getUser } from '../../store/selectors';
-
 import { Redirect, Route } from 'react-router';
+
+import { getUser } from '../../store/selectors';
 
 export default function PrivateRouter({ component: Component, ...rest }) {
 	const user = useSelector(getUser);

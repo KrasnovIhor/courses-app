@@ -4,8 +4,7 @@ import App from '../../../App';
 import userEvent from '@testing-library/user-event';
 
 import { renderWithReduxAndRouter } from '../../../store/tests/MockedProvider';
-
-import { mockedState, initialMockedState } from '../../../constants';
+import { mockedState, initialMockedState } from '../../../mock';
 
 const mockedStore = {
 	getState: () => initialMockedState,

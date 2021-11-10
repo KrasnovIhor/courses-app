@@ -1,9 +1,8 @@
 import { useEffect } from 'react';
-
 import { useParams } from 'react-router';
-import { Link } from 'react-router-dom';
-
 import { useDispatch, useSelector } from 'react-redux';
+
+import { Link } from 'react-router-dom';
 
 import { fetchCoursesThunk } from '../../store/courses/thunk';
 import { fetchAuthorsThunk } from '../../store/authors/thunk';
